@@ -76,24 +76,46 @@ exports.handler = async (event) => {
   text += `<b>ที่อยู่:</b> ${escape(data.address)}\n`;
   text += `<b>เริ่มงาน:</b> ${startDate}\n`;
   text += `<b>ประวัติงาน:</b> ${workHistoryText}\n\n`;
-  text += `<a href="${data.photo_url}"><b>🔗 ดูรูปถ่ายผู้สมัคร</b></a>`;
+  if (data.photo_url) {
+    text += `<a href="${data.photo_url}"><b>🔗 ดูรูปถ่ายผู้สมัคร</b></a>`;
+  } else {
+    text += `<b>🔗 ดูรูปถ่ายผู้สมัคร:</b> <i>ไม่มีการแนบไฟล์</i>`;
+  }
 
   // 8. ส่งไปที่ Telegram API
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  try {
-    const response = await fetch(url, {
+  const telegramBaseUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+  const sendTelegramRequest = async (endpoint, payload) => {
+    const response = await fetch(`${telegramBaseUrl}/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: targetChatId,
-        text: text,
-        parse_mode: 'HTML',
-        disable_web_page_preview: false // ตั้งให้แสดง preview ลิงก์รูปได้
-      }),
+      body: JSON.stringify(payload),
     });
+
     if (!response.ok) {
-      throw new Error(`Telegram API error: ${response.statusText}`);
+      throw new Error(`Telegram API error (${endpoint}): ${response.statusText}`);
     }
+
+    return response.json();
+  };
+
+  try {
+    if (data.photo_url) {
+      const caption = `ตำแหน่ง: <b>${escape(data.position)}</b>\nชื่อ: <b>${escape(data.first_name)} ${escape(data.last_name)}</b>`;
+      await sendTelegramRequest('sendPhoto', {
+        chat_id: targetChatId,
+        photo: data.photo_url,
+        caption,
+        parse_mode: 'HTML',
+      });
+    }
+
+    await sendTelegramRequest('sendMessage', {
+      chat_id: targetChatId,
+      text: text,
+      parse_mode: 'HTML',
+      disable_web_page_preview: false, // ตั้งให้แสดง preview ลิงก์รูปได้
+    });
+
     return { statusCode: 200, body: JSON.stringify({ message: 'Success' }) };
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ message: error.message }) };

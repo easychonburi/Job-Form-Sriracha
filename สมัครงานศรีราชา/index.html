@@ -475,8 +475,16 @@
         }
 
         function showUploadError(message) {
-            document.getElementById('uploadError').textContent = message;
-            document.getElementById('uploadError').classList.remove('hidden');
+            const uploadErrorEl = document.getElementById('uploadError');
+
+            if (!message) {
+                uploadErrorEl.textContent = '';
+                uploadErrorEl.classList.add('hidden');
+                return;
+            }
+
+            uploadErrorEl.textContent = message;
+            uploadErrorEl.classList.remove('hidden');
             document.getElementById('uploadProgress').classList.add('hidden');
             document.getElementById('uploadSuccess').classList.add('hidden');
             uploadedImageUrl = ''; // ล้าง URL ถ้าพลาด
