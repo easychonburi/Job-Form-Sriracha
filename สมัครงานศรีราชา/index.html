@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฟอร์มสมัครงาน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS ของวิว (เหมือนเดิมทุกประการ) */
+        body {
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .input-focus {
+            transition: all 0.2s ease;
+        }
+        .input-focus:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-full">
+    <div id="positionSelection" class="min-h-full p-6 fade-in">
+        <header class="text-center mb-10 pt-8">
+            <h1 class="text-5xl font-bold text-white mb-2">EASY หมี่ไก่ฉีก</h1>
+            <h2 class="text-4xl font-bold text-white mb-3">สมัครงาน</h2>
+            <p class="text-xl text-white opacity-90">เลือกตำแหน่งที่ต้องการสมัคร</p>
+        </header>
+
+        <main class="max-w-md mx-auto space-y-6">
+            <div class="position-card glass-effect card-hover rounded-2xl p-6 slide-up">
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold text-black mb-3">พนักงานประจำ</h3>
+                    <p class="text-lg text-black font-medium mb-2">สาขาศรีราชา</p>
+                    <p class="text-base text-red-600 font-medium mb-4">จันทร์–ศุกร์ 09:00–17:00</p>
+                    <button onclick="selectPosition('สาขาศรีราชา – พนักงานประจำ (จันทร์–ศุกร์ 09:00–17:00)')" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl text-base font-semibold transition-all hover:scale-105">
+                        เลือกสมัครตำแหน่งนี้
+                    </button>
+                </div>
+            </div>
+
+            <div class="position-card glass-effect card-hover rounded-2xl p-6 slide-up">
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold text-black mb-3">พนักงานพาร์ทไทม์</h3>
+                    <p class="text-lg text-black font-medium mb-2">สาขาศรีราชา</p>
+                    <p class="text-base text-red-600 font-medium mb-4">จันทร์–เสาร์ 17:00–23:00</p>
+                    <button onclick="selectPosition('สาขาศรีราชา – พนักงานพาร์ทไทม์ (จันทร์–เสาร์ 17:00–23:00)')" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl text-base font-semibold transition-all hover:scale-105">
+                        เลือกสมัครตำแหน่งนี้
+                    </button>
+                </div>
+            </div>
+
+            <div class="position-card glass-effect card-hover rounded-2xl p-6 slide-up">
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold text-black mb-3">พนักงานพาร์ทไทม์</h3>
+                    <p class="text-lg text-black font-medium mb-2">สาขาศรีราชา</p>
+                    <p class="text-base text-red-600 font-medium mb-4">เฉพาะวันอาทิตย์ 10:30–20:00</p>
+                    <button onclick="selectPosition('สาขาศรีราชา – พนักงานพาร์ทไทม์ (เฉพาะวันอาทิตย์ 10:30–20:00)')" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl text-base font-semibold transition-all hover:scale-105">
+                        เลือกสมัครตำแหน่งนี้
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="applicationForm" class="hidden min-h-full p-6">
+        <div class="glass-effect rounded-2xl max-w-md mx-auto fade-in">
+            <header class="text-center p-6 border-b border-gray-200">
+                <button onclick="goBack()" class="float-left text-red-600 text-2xl hover:text-red-700 transition-colors">←</button>
+                <div class="mb-4">
+                    <svg class="mx-auto h-12 w-12 text-red-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-black mb-2">แบบฟอร์มสมัครงาน</h1>
+                <p id="selectedPosition" class="text-base text-black font-medium"></p>
+            </header>
+
+            <main class="p-6">
+                <form id="jobApplicationForm" class="space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center mb-4">
+                            <svg class="h-6 w-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-black">ข้อมูลส่วนตัว</h3>
+                        </div>
+
+                        <div>
+                            <label for="firstName" class="block text-base font-medium text-black mb-2">ชื่อจริง *</label>
+                            <input type="text" id="firstName" name="first_name" required 
+                                   class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        </div>
+
+                        <div>
+                            <label for="lastName" class="block text-base font-medium text-black mb-2">นามสกุล *</label>
+                            <input type="text" id="lastName" name="last_name" required 
+                                   class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        </div>
+
+                        <div>
+                            <label for="nickname" class="block text-base font-medium text-black mb-2">ชื่อเล่น *</label>
+                            <input type="text" id="nickname" name="nickname" required 
+                                   class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label for="age" class="block text-base font-medium text-black mb-2">อายุ *</label>
+                                <input type="number" id="age" name="age" required min="15" max="70"
+                                       class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            </div>
+                            <div>
+                                <label for="weight" class="block text-base font-medium text-black mb-2">น้ำหนัก (กก.) *</label>
+                                <input type="number" id="weight" name="weight" required min="30" max="200"
+                                       class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            </div>
+                            <div>
+                                <label for="height" class="block text-base font-medium text-black mb-2">ส่วนสูง (ซม.) *</label>
+                                <input type="number" id="height" name="height" required min="140" max="220"
+                                       class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="lineId" class="block text-base font-medium text-black mb-2">ID LINE *</label>
+                            <input type="text" id="lineId" name="line_id" required 
+                                   class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-base font-medium text-black mb-2">เบอร์โทร *</label>
+                            <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}"
+                                   class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        </div>
+
+                        <div>
+                            <label for="education" class="block text-base font-medium text-black mb-2">ระดับการศึกษา *</label>
+                            <select id="education" name="education" required 
+                                    class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <option value="">เลือกระดับการศึกษา</option>
+                                <option value="ป.6">ป.6</option>
+                                <option value="ม.3">ม.3</option>
+                                <option value="ม.6">ม.6</option>
+                                <option value="ปวช.">ปวช.</option>
+                                <option value="ปวส.">ปวส.</option>
+                                <option value="ปริญญาตรี">ปริญญาตรี</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="address" class="block text-base font-medium text-black mb-2">ที่อยู่ปัจจุบัน *</label>
+                            <textarea id="address" name="address" required rows="3"
+                                      class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 border-gray-200 pt-6">
+                        <div class="flex items-center mb-4">
+                            <svg class="h-6 w-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-black">วันที่พร้อมเริ่มงาน *</h3>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-red-300 transition-colors">
+                                <input type="radio" name="start_date_type" value="immediate" checked required
+                                       class="mr-3 text-red-600 focus:ring-red-500 w-5 h-5">
+                                <span class="text-base text-black">พร้อมเริ่มงานทันที</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-red-300 transition-colors">
+                                <input type="radio" name="start_date_type" value="specific" required
+                                       class="mr-3 text-red-600 focus:ring-red-500 w-5 h-5" onchange="toggleDateInput()">
+                                <span class="text-base text-black">กำหนดวันที่เฉพาะ</span>
+                            </label>
+                            <div id="dateInputContainer" class="hidden">
+                                <label for="specificDate" class="block text-base font-medium text-black mb-2">กรุณาเลือกวันที่ *</label>
+                                <input type="date" id="specificDate" name="specific_start_date"
+                                       class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 border-gray-200 pt-6">
+                        <div class="flex items-center mb-4">
+                            <svg class="h-6 w-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-black">ประวัติการทำงาน</h3>
+                        </div>
+                        <p class="text-base text-black mb-4">หากไม่มีประวัติ ให้เว้นว่างได้</p>
+                        
+                        <div class="mb-4">
+                            <label for="workCount" class="block text-base font-medium text-black mb-2">เคยทำงานมาแล้วกี่ที่</label>
+                            <select id="workCount" name="workCount" onchange="showWorkHistory()"
+                                    class="input-focus w-full p-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <option value="0">0</option>
+                                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+
+                        <div id="workHistorySection" class="space-y-4 hidden">
+                            <h4 class="text-base font-medium text-black">งานล่าสุด 3 ที่ (เรียงจากล่าสุด)</h4>
+                            
+                            <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                                <h5 class="text-base font-medium text-black mb-3">งานที่ 1 (ล่าสุด)</h5>
+                                <input type="text" name="workplace1" placeholder="ชื่อสถานที่ทำงาน"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <input type="text" name="position1" placeholder="ตำแหน่ง"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <textarea name="description1" placeholder="อธิบายสิ่งที่ทำคร่าวๆ" rows="2"
+                                          class="input-focus w-full p-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                                <h5 class="text-base font-medium text-black mb-3">งานที่ 2</h5>
+                                <input type="text" name="workplace2" placeholder="ชื่อสถานที่ทำงาน"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <input type="text" name="position2" placeholder="ตำแหน่ง"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <textarea name="description2" placeholder="อธิบายสิ่งที่ทำคร่าวๆ" rows="2"
+                                          class="input-focus w-full p-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 rounded-xl border-2 border-gray-200">
+                                <h5 class="text-base font-medium text-black mb-3">งานที่ 3</h5>
+                                <input type="text" name="workplace3" placeholder="ชื่อสถานที่ทำงาน"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <input type="text" name="position3" placeholder="ตำแหน่ง"
+                                       class="input-focus w-full p-3 mb-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <textarea name="description3" placeholder="อธิบายสิ่งที่ทำคร่าวๆ" rows="2"
+                                          class="input-focus w-full p-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 border-gray-200 pt-6">
+                        <div class="flex items-center mb-4">
+                            <svg class="h-6 w-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <h3 class="text-lg font-semibold text-black">อัปโหลดรูปถ่าย *</h3>
+                        </div>
+                        <p class="text-base text-black mb-2">เห็นหน้าชัดๆ (JPG/PNG ไม่เกิน 10MB)</p>
+                        <p class="text-base text-red-600 mb-4 font-medium">หากไม่อัพโหลดรูปจะไม่สามารถส่งแบบฟอร์มได้</p>
+                        
+                        <div id="uploadArea" class="border-3 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-red-500 transition-all hover:bg-red-50"
+                             onclick="document.getElementById('photoInput').click()">
+                            <div id="uploadContent">
+                                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                <p class="text-lg text-black font-medium">คลิกเพื่อเลือกรูปภาพ</p>
+                            </div>
+                        </div>
+                        
+                        <input type="file" id="photoInput" accept="image/jpeg,image/png" class="hidden" onchange="handleFileUpload(event)">
+                        
+                        <div id="uploadProgress" class="hidden mt-4">
+                            <div class="flex justify-between text-base text-black mb-2">
+                                <span id="uploadStatus">กำลังอัปโหลด...</span>
+                                <span id="uploadPercent">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="progressBar" class="progress-bar bg-red-600 h-3 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="uploadError" class="hidden mt-3 text-red-600 text-base font-medium"></div>
+                        <div id="uploadSuccess" class="hidden mt-3 text-green-600 text-base font-medium"></div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" disabled 
+                            class="w-full bg-gray-400 text-white py-4 px-6 rounded-2xl text-lg font-semibold cursor-not-allowed transition-all">
+                        ส่งใบสมัคร
+                    </button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 z-50">
+        <div class="glass-effect rounded-2xl p-8 max-w-sm w-full text-center slide-up">
+            <div class="text-green-600 text-6xl mb-6">✓</div>
+            <h3 class="text-2xl font-bold text-black mb-4">ส่งใบสมัครสำเร็จ!</h3>
+            <p class="text-base text-black mb-6">หากท่านผ่านการคัดเลือก ทางร้านจะรีบติดต่อกลับไปโดยเร็วที่สุด</p>
+            <p class="text-base text-black mb-6">หากมีข้อสงสัยสามารถทักไลน์ @244dnoyw</p>
+            <a href="https://lin.ee/ShkrKFE" target="_blank" rel="noopener noreferrer" 
+               class="inline-block bg-green-500 text-white px-6 py-3 rounded-xl text-base font-semibold mb-4 hover:bg-green-600 transition-colors">
+                เพิ่มเพื่อน LINE
+            </a>
+            <br>
+            <button onclick="resetForm()" class="text-red-600 hover:text-red-700 text-base font-medium">สมัครตำแหน่งอื่น</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== Cloudinary config (ของวิว) =====
+        const CLOUD_NAME = "dsdtmdygt";
+        const UPLOAD_PRESET = "ml_default";
+        const CLOUD_FOLDER = "job-applications";
+
+        // --- (ตัวแปร Global ของวิว) ---
+        let selectedPositionText = '';
+        let uploadedImageUrl = ''; // นี่คือตัวแปรสำคัญที่จะเก็บ URL จริง
+
+        // --- (ฟังก์ชันแสดง/ซ่อนหน้าของวิว - เหมือนเดิม) ---
+        function selectPosition(position) {
+            selectedPositionText = position;
+            document.getElementById('selectedPosition').textContent = position;
+            document.getElementById('positionSelection').classList.add('hidden');
+            document.getElementById('applicationForm').classList.remove('hidden');
+        }
+
+        function goBack() {
+            document.getElementById('applicationForm').classList.add('hidden');
+            document.getElementById('positionSelection').classList.remove('hidden');
+        }
+
+        function toggleDateInput() {
+            const specificRadio = document.querySelector('input[name="start_date_type"][value="specific"]');
+            const dateInputContainer = document.getElementById('dateInputContainer');
+            const dateInput = document.getElementById('specificDate');
+            
+            if (specificRadio.checked) {
+                dateInputContainer.classList.remove('hidden');
+                dateInput.required = true;
+            } else {
+                dateInputContainer.classList.add('hidden');
+                dateInput.required = false;
+            }
+        }
+
+        function showWorkHistory() {
+            const workCount = document.getElementById('workCount').value;
+            const workHistorySection = document.getElementById('workHistorySection');
+            
+            if (workCount > 0) {
+                workHistorySection.classList.remove('hidden');
+            } else {
+                workHistorySection.classList.add('hidden');
+            }
+        }
+
+        // --- (ฟังก์ชันจัดการอัปโหลดของวิว) ---
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.match(/^image\/(jpeg|png)$/)) {
+                showUploadError('กรุณาเลือกไฟล์ JPG หรือ PNG เท่านั้น');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showUploadError('ไฟล์มีขนาดใหญ่เกิน 10MB');
+                return;
+            }
+
+            showUploadProgress();
+            
+            // !! แก้ไข !! เรียกใช้ฟังก์ชันอัปโหลด "ของจริง"
+            uploadToCloudinary(file);
+        }
+
+        // !! ใหม่ !! ฟังก์ชันอัปโหลด "ของจริง" (ปรับแต่งให้ใช้ฟังก์ชันของวิว)
+        function uploadToCloudinary(file) {
+            const ts = new Date().toISOString().replace(/[:.]/g, '-');
+            const publicId = `job-app-${ts}`;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+            formData.append('folder', CLOUD_FOLDER);
+            formData.append('public_id', publicId);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    // เรียกใช้ฟังก์ชัน progress bar ของวิว
+                    updateProgress((e.loaded / e.total) * 100);
+                }
+            });
+
+            xhr.onload = () => {
+                try {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.secure_url) {
+                            // !! สำคัญ !! เก็บ URL จริงไว้ในตัวแปรของวิว
+                            uploadedImageUrl = res.secure_url; 
+                            
+                            // เรียกใช้ฟังก์ชัน "สำเร็จ" ของวิว
+                            showUploadSuccess();
+                            enableSubmitButton();
+                        } else {
+                            throw new Error('no secure_url');
+                        }
+                    } else {
+                        throw new Error('upload failed');
+                    }
+                } catch (err) {
+                    // เรียกใช้ฟังก์ชัน "Error" ของวิว
+                    showUploadError('อัปโหลดไม่สำเร็จ กรุณาลองใหม่');
+                }
+            };
+
+            xhr.onerror = () => {
+                // เรียกใช้ฟังก์ชัน "Error" ของวิว
+                showUploadError('อัปโหลดไม่สำเร็จ (เครือข่ายขัดข้อง)');
+            };
+
+            xhr.send(formData);
+        }
+
+
+        // --- (ฟังก์ชัน Helper ของวิว - เหมือนเดิม) ---
+        function showUploadProgress() {
+            document.getElementById('uploadProgress').classList.remove('hidden');
+            document.getElementById('uploadError').classList.add('hidden');
+            document.getElementById('uploadSuccess').classList.add('hidden');
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('uploadPercent').textContent = Math.round(percent) + '%';
+        }
+
+        function showUploadError(message) {
+            document.getElementById('uploadError').textContent = message;
+            document.getElementById('uploadError').classList.remove('hidden');
+            document.getElementById('uploadProgress').classList.add('hidden');
+            document.getElementById('uploadSuccess').classList.add('hidden');
+            uploadedImageUrl = ''; // ล้าง URL ถ้าพลาด
+            disableSubmitButton();
+        }
+
+        function showUploadSuccess() {
+            document.getElementById('uploadSuccess').textContent = 'อัปโหลดรูปภาพสำเร็จ!';
+            document.getElementById('uploadSuccess').classList.remove('hidden');
+            document.getElementById('uploadProgress').classList.add('hidden');
+            document.getElementById('uploadError').classList.add('hidden');
+            
+            // แสดงรูปที่อัปโหลด (เหมือนเดิม)
+            const uploadContent = document.getElementById('uploadContent');
+            uploadContent.innerHTML = `
+                <img src="${URL.createObjectURL(document.getElementById('photoInput').files[0])}" 
+                     class="mx-auto h-24 w-24 object-cover rounded-2xl mb-3 border-4 border-green-500">
+                <p class="text-green-600 text-base font-medium">อัปโหลดสำเร็จ</p>
+            `;
+        }
+
+        function enableSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            submitBtn.classList.add('bg-red-600', 'hover:bg-red-700', 'cursor-pointer', 'hover:scale-105');
+        }
+
+        function disableSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+            submitBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'cursor-pointer', 'hover:scale-105');
+        }
+
+        function resetForm() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('applicationForm').classList.add('hidden');
+            document.getElementById('positionSelection').classList.remove('hidden');
+            document.getElementById('jobApplicationForm').reset();
+            uploadedImageUrl = '';
+            disableSubmitButton();
+            
+            // รีเซ็ตการแสดงผลการอัปโหลด (เหมือนเดิม)
+            document.getElementById('uploadContent').innerHTML = `
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                <p class="text-lg text-black font-medium">คลิกเพื่อเลือกรูปภาพ</p>
+            `;
+            document.getElementById('uploadProgress').classList.add('hidden');
+            document.getElementById('uploadError').classList.add('hidden');
+            document.getElementById('uploadSuccess').classList.add('hidden');
+        }
+
+        // !! แก้ไข !! จัดการการส่งฟอร์ม (ของจริง)
+        document.getElementById('jobApplicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // หยุดการส่งฟอร์มปกติ
+            
+            if (!uploadedImageUrl) {
+                showUploadError('กรุณาอัปโหลดรูปถ่ายก่อนส่งใบสมัคร');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'กำลังส่งข้อมูล...';
+            showUploadError(''); // ล้าง Error เก่า
+
+            // 1. รวบรวมข้อมูลจากฟอร์ม
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // 2. !! สำคัญ !! เพิ่มข้อมูลที่ไม่ได้อยู่ในฟอร์ม
+            data.position = selectedPositionText; // เพิ่มตำแหน่งที่เลือก
+            data.photo_url = uploadedImageUrl;   // เพิ่ม URL รูปที่อัปโหลดจริง
+
+            try {
+                // 3. ส่งไปที่ Netlify Function
+                const response = await fetch('/.netlify/functions/send-to-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.statusText);
+                }
+
+                // 4. สำเร็จ! แสดง Modal
+                document.getElementById('successModal').classList.remove('hidden');
+            
+            } catch (error) {
+                // 5. ไม่สำเร็จ! แสดง Error
+                console.error('Submit error:', error);
+                showUploadError('เกิดข้อผิดพลาดในการส่งฟอร์ม กรุณาลองอีกครั้ง');
+                submitBtn.disabled = false; // คืนปุ่มให้กดซ้ำ
+            } finally {
+                // คืนค่าปุ่ม (ในกรณีที่ Error)
+                // ถ้าสำเร็จ ปุ่มจะถูกซ่อนโดย Modal และจัดการโดย resetForm()
+                if (!document.getElementById('successModal').classList.contains('hidden')) {
+                    // ถ้าสำเร็จ ไม่ต้องทำอะไรกับปุ่ม
+                } else {
+                    submitBtn.textContent = 'ส่งใบสมัคร';
+                }
+            }
+        });
+
+        // เพิ่ม event listener สำหรับ radio button (เหมือนเดิม)
+        document.querySelectorAll('input[name="start_date_type"]').forEach(radio => {
+            radio.addEventListener('change', toggleDateInput);
+        });
+    </script>
+    </body>
+</html>
